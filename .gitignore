@@ -4,6 +4,7 @@
 *.swp
 /.bundle
 /.env
+/.powenv
 /.foreman
 /coverage/*
 /db/*.sqlite3
