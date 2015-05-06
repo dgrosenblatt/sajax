@@ -1,8 +1,7 @@
 FactoryGirl.define do
   factory :puzzle do
-    solution "MyString"
-category "MyString"
-date "2015-05-01"
+    solution "Pat and Vanna"
+    category "People"
+    date "2015-05-01"
   end
-
 end
