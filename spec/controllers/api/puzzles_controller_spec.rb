@@ -14,4 +14,15 @@ describe Api::PuzzlesController do
       expect(puzzle_response[:puzzles].length).to eq 5
     end
   end
+
+  describe "GET #show" do
+    it "returns information about a puzzle" do
+      puzzle = FactoryGirl.create(:puzzle)
+      get :show, id: puzzle.id
+      puzzle_response = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_success
+      expect(puzzle_response[:puzzle][:solution]).to eq puzzle.solution
+      expect(puzzle_response[:puzzle][:category]).to eq puzzle.category
+    end
+  end
 end
