@@ -13,7 +13,10 @@ module Api
 
     def show
       puzzle = Puzzle.find(params[:id])
-      render json: puzzle, status: 200
+      respond_to do |format|
+        format.json { render json: puzzle, status: 200 }
+        format.xml  { render xml: puzzle, status: 200 }
+      end
     end
   end
 end
