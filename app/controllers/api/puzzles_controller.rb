@@ -5,7 +5,10 @@ module Api
       if category = params[:category]
         puzzles = puzzles.where("lower(category) = ?", category.downcase)
       end
-      render json: puzzles, status: 200
+      respond_to do |format|
+        format.json { render json: puzzles, status: 200 }
+        format.xml  { render xml: puzzles, status: 200 }
+      end
     end
 
     def show
