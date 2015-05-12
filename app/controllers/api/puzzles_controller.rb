@@ -18,5 +18,19 @@ module Api
         format.xml  { render xml: puzzle, status: 200 }
       end
     end
+
+    def create
+      puzzle = Puzzle.new(puzzle_params)
+      if puzzle.save
+        render json: puzzle, status: 201, location: api_puzzle_path(puzzle)
+      else
+        head 422
+      end
+    end
+
+    private
+    def puzzle_params
+      params.require(:puzzle).permit(:solution, :category, :date)
+    end
   end
 end

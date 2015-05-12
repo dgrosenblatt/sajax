@@ -43,4 +43,25 @@ describe Api::PuzzlesController do
       expect(response.content_type).to eq Mime::XML.to_s
     end
   end
+
+  describe 'POST #create' do
+    it 'creates a new puzzle from submission of valid info' do
+      puzzle = FactoryGirl.build(:puzzle)
+      puzzle_total = Puzzle.count
+      post :create, format: :json,
+        puzzle: { solution: puzzle.solution, category: puzzle.category, date: puzzle.date}
+      expect(response.status).to eq 201
+      expect(response.content_type).to eq Mime::JSON.to_s
+      expect(Puzzle.count).to eq puzzle_total + 1
+    end
+
+    it "responds with 422 upon submission without required info" do
+      puzzle = FactoryGirl.build(:puzzle)
+      puzzle_total = Puzzle.count
+      post :create, format: :json,
+        puzzle: { solution: nil }
+      expect(response.status).to eq 422
+      expect(Puzzle.count).to eq puzzle_total
+    end
+  end
 end

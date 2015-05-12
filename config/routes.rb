@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
   namespace :api, path: '/', constraints: { subdomain: 'api'} do
-    resources :puzzles, only: [:index, :show]
+    resources :puzzles, only: [:index, :show, :create]
   end
 end
