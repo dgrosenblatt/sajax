@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::PuzzlesController do
+describe Api::V1::PuzzlesController do
   before(:each) { @request.host = 'api.example.com' }
 
   describe 'GET #index' do
