@@ -55,13 +55,31 @@ describe Api::PuzzlesController do
       expect(Puzzle.count).to eq puzzle_total + 1
     end
 
-    it "responds with 422 upon submission without required info" do
-      puzzle = FactoryGirl.build(:puzzle)
+    it 'responds with 422 upon submission without required info' do
       puzzle_total = Puzzle.count
       post :create, format: :json,
         puzzle: { solution: nil }
       expect(response.status).to eq 422
       expect(Puzzle.count).to eq puzzle_total
+    end
+  end
+
+  describe 'PATCH #update' do
+    it 'updates an existing puzzle' do
+      puzzle = FactoryGirl.create(:puzzle)
+      patch :update, id: puzzle.id,
+        puzzle: { solution: 'Trebek', category: 'HOST' }
+      puzzle_response = JSON.parse(response.body, symbolize_names: true)
+      expect(response.status).to eq 200
+      expect(puzzle_response[:puzzle][:solution]).to eq 'Trebek'
+      expect(puzzle_response[:puzzle][:category]).to eq 'HOST'
+    end
+
+    it 'responds with 422 upon submission of invalid info' do
+      puzzle = FactoryGirl.create(:puzzle)
+      patch :update, id: puzzle.id,
+        puzzle: { solution: '', category: '' }
+      expect(response.status).to eq 422
     end
   end
 end

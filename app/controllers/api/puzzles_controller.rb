@@ -28,6 +28,15 @@ module Api
       end
     end
 
+    def update
+      puzzle = Puzzle.find(params[:id])
+      if puzzle.update(puzzle_params)
+        render json: puzzle, status: 200
+      else
+        head 422
+      end
+    end
+
     private
     def puzzle_params
       params.require(:puzzle).permit(:solution, :category, :date)
