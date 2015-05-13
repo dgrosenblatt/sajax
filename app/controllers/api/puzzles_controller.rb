@@ -37,6 +37,12 @@ module Api
       end
     end
 
+    def destroy
+      puzzle = Puzzle.find(params[:id])
+      puzzle.destroy
+      head 204
+    end
+
     private
     def puzzle_params
       params.require(:puzzle).permit(:solution, :category, :date)

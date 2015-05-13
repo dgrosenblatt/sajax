@@ -82,4 +82,14 @@ describe Api::PuzzlesController do
       expect(response.status).to eq 422
     end
   end
+
+  describe 'DELETE #destroy' do
+    it 'deletes a puzzle' do
+      puzzle = FactoryGirl.create(:puzzle)
+      puzzle_total = Puzzle.count
+      delete :destroy, id: puzzle.id
+      expect(response.status).to eq 204
+      expect(Puzzle.count).to eq puzzle_total - 1
+    end
+  end
 end
