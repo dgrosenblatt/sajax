@@ -1,4 +1,6 @@
 class Puzzle < ActiveRecord::Base
+  has_many :games
+
   validates :solution,
     presence: true
 
