@@ -9,4 +9,8 @@ class Puzzle < ActiveRecord::Base
 
   validates :date,
     presence: true
+
+  def self.random
+    limit(1).offset(rand(count)).first
+  end
 end
