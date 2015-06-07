@@ -1,6 +1,8 @@
 module Api
   module V1
     class PuzzlesController < ApplicationController
+      before_action :authenticate, only: :index
+
       def index
         puzzles = Puzzle.all
         if category = params[:category]
@@ -47,6 +49,24 @@ module Api
       private
       def puzzle_params
         params.require(:puzzle).permit(:solution, :category, :date)
+      end
+
+      def authenticate
+        authenticate_token || render_unauthorized
+      end
+
+      def authenticate_token
+        authenticate_with_http_token do |token, options|
+          User.find_by(auth_token: token)
+        end
+      end
+
+      def render_unauthorized
+        self.headers['WWW-Authenticate'] = 'Token-realm="Puzzles"'
+        respond_to do |format|
+          format.json { render json: 'Bad Credentials', status: 401 }
+          format.xml { render xml: 'Bad Credentials', status: 401 }
+        end
       end
     end
   end
