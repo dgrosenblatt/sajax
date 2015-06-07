@@ -4,10 +4,14 @@ describe Api::V1::PuzzlesController do
   before(:each) { @request.host = 'api.example.com' }
 
   describe 'GET #index' do
-    before { FactoryGirl.create_list(:puzzle, 5) }
+    before do
+      FactoryGirl.create_list(:puzzle, 5)
+      @user = FactoryGirl.create(:user)
+    end
 
-    it 'renders JSON representation of puzzles' do
+    it 'renders JSON representation of puzzles with good credentials' do
       @request.headers['Accept'] = Mime::JSON
+      @request.headers['Authorization'] = "Token token=#{@user.auth_token}"
       get :index
       puzzle_response = JSON.parse(response.body, symbolize_names: true)
       expect(response.status).to eq 200
@@ -15,11 +19,20 @@ describe Api::V1::PuzzlesController do
       expect(puzzle_response[:puzzles].length).to eq 5
     end
 
-    it 'renders XML representation of puzzles' do
+    it 'renders XML representation of puzzles with good credentials' do
       @request.headers['Accept'] = Mime::XML
+      @request.headers['Authorization'] = "Token token=#{@user.auth_token}"
       get :index
       expect(response.status).to eq 200
       expect(response.content_type).to eq Mime::XML.to_s
+    end
+
+    it 'responds with 401 Unauthorized upon submission of bad credentials' do
+      @request.headers['Accept'] = Mime::JSON
+      @request.headers['Authorization'] = "Token token=#{@user.auth_token}blerg"
+      get :index
+      expect(response.status).to eq 401
+      expect(response.headers['WWW-Authenticate']).to eq 'Token-realm="Puzzles"'
     end
   end
 
