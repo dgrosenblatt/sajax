@@ -3,7 +3,7 @@ module Api
     class GamesController < ApplicationController
       def create
         game = Game.create
-        render json: game, status: 201
+        render json: game, status: :created
       end
 
       def update
@@ -12,7 +12,7 @@ module Api
           head 401
         end
         game.make_guess(params[:guess])
-        render json: game, status: 200
+        render json: game
       end
     end
   end
