@@ -1,9 +1,7 @@
 class Game < ActiveRecord::Base
-  before_create :assign_puzzle
-
   belongs_to :puzzle
-
-
+  before_create :assign_puzzle
+  
   def make_guess(letter)
     self.reveal = self.reveal + letter.upcase
     self.progress = self.puzzle.solution
@@ -13,10 +11,12 @@ class Game < ActiveRecord::Base
     if self.progress == self.puzzle.solution
       self.status = 'Solved'
     end
-    self.save
+    save!
+    self
   end
 
   private
+  
   def assign_puzzle
     self.puzzle = Puzzle.random
     self.status = 'Active'
