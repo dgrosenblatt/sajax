@@ -2,6 +2,8 @@ class Game < ActiveRecord::Base
   belongs_to :puzzle
   before_create :assign_puzzle
   
+  delegate :category, to: :puzzle
+  
   def make_guess(letter)
     self.reveal = self.reveal + letter.upcase
     self.progress = self.puzzle.solution
