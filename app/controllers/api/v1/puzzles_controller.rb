@@ -36,7 +36,8 @@ module Api
         if puzzle.update(puzzle_params)
           render json: puzzle, status: 200
         else
-          head 422
+          render json: { errors: puzzle.errors.full_messages },
+                 status: :unprocessable_entity
         end
       end
 
